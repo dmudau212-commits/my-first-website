@@ -3,34 +3,199 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My First Website</title>
+  <title>ShopFinder — Trusted E-Commerce Directory</title>
+  <meta name="description" content="Find trusted online stores, compare prices, and discover fast local shipping.">
   <style>
-    body {
-      font-family: sans-serif;
-      background-color: #0f172a;
-      color: white;
-      text-align: center;
-      padding: 50px 20px;
-    }
-    h1 {
-      color: #38bdf8;
-    }
-    .card {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background: #0f172a; color: #f8fafc; min-height: 100vh; }
+    
+    /* Sticky Top Ad Unit */
+    .ad-banner { position: sticky; top: 0; background: #1e293b; border-bottom: 1px solid #334155; text-align: center; padding: 8px; font-size: 12px; color: #38bdf8; z-index: 100; }
+    .ad-banner span { color: #94a3b8; font-size: 10px; display: block; text-transform: uppercase; }
+
+    /* Layout */
+    .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+    header { text-align: center; margin: 20px 0; }
+    h1 { color: #38bdf8; font-size: 2rem; margin-bottom: 8px; }
+    p { color: #94a3b8; font-size: 0.95rem; }
+
+    /* Controls */
+    .search-box { display: flex; gap: 10px; margin: 25px 0 15px; }
+    input[type="text"] { flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: white; font-size: 1rem; outline: none; }
+    input[type="text"]:focus { border-color: #38bdf8; }
+    
+    .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; }
+    select { padding: 8px 12px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: white; font-size: 0.85rem; outline: none; cursor: pointer; }
+
+    /* Results Cards */
+    .results-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 600px) { .results-grid { grid-template-columns: 1fr 1fr; } }
+
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .store-name { font-weight: 600; font-size: 1.1rem; color: #f8fafc; }
+    .rating { background: #0284c7; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
+    
+    .badge { display: inline-block; background: #334155; color: #38bdf8; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; margin-top: 4px; }
+    
+    .product-info { margin: 12px 0; border-top: 1px solid #334155; padding-top: 10px; }
+    .item-title { font-size: 0.9rem; color: #cbd5e1; }
+    .item-price { font-size: 1.2rem; font-weight: bold; color: #4ade80; margin-top: 4px; }
+
+    .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+    .shipping { font-size: 0.8rem; color: #94a3b8; }
+    .visit-btn { background: #38bdf8; color: #0f172a; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; }
   </style>
 </head>
 <body>
 
-  <h1>Welcome to My Website</h1>
-  <p>Built with GitHub and hosted live!</p>
-
-  <div class="card">
-    <p>This is where our tool/app will sit.</p>
+  <!-- Sticky Top Ad Unit -->
+  <div class="ad-banner">
+    <span>Advertisement</span>
+    Place Ad Banner Code Here (A-Ads or Google AdSense)
   </div>
 
+  <div class="container">
+    <header>
+      <h1>ShopFinder</h1>
+      <p>Compare prices, check store trust ratings, and find fast local delivery.</p>
+    </header>
+
+    <!-- Search Input -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search for items or stores (e.g. hoodie)...">
+    </div>
+
+    <!-- Filter Dropdowns -->
+    <div class="filters">
+      <select id="locationFilter">
+        <option value="all">All Locations</option>
+        <option value="South Africa">South Africa 🇿🇦</option>
+        <option value="International">International 🌍</option>
+      </select>
+
+      <select id="sortFilter">
+        <option value="rating">Highest Rated</option>
+        <option value="fastest">Fastest Shipping</option>
+      </select>
+    </div>
+
+    <!-- Dynamic Output -->
+    <div class="results-grid" id="resultsGrid"></div>
+  </div>
+
+  <script>
+    // Store Database Array
+    const storesData = [
+      {
+        name: "Urban Style Co",
+        url: "https://example.com",
+        location: "South Africa",
+        shippingDays: 2,
+        shippingText: "⚡ 2-3 Days Shipping",
+        rating: 4.9,
+        product: "Oversized Fleece Hoodie",
+        price: 650,
+        currency: "R",
+        category: "hoodie"
+      },
+      {
+        name: "Global Threads",
+        url: "https://example.com",
+        location: "International",
+        shippingDays: 10,
+        shippingText: "✈️ 7-12 Days Shipping",
+        rating: 4.5,
+        product: "Vintage Graphic Hoodie",
+        price: 450,
+        currency: "R",
+        category: "hoodie"
+      },
+      {
+        name: "Drip Supply ZA",
+        url: "https://example.com",
+        location: "South Africa",
+        shippingDays: 1,
+        shippingText: "⚡ 1-2 Days Overnight",
+        rating: 4.8,
+        product: "Heavyweight Zip Hoodie",
+        price: 799,
+        currency: "R",
+        category: "hoodie"
+      },
+      {
+        name: "Kicks & Fits",
+        url: "https://example.com",
+        location: "South Africa",
+        shippingDays: 3,
+        shippingText: "📦 3-4 Days Shipping",
+        rating: 4.2,
+        product: "Cargo Streetwear Pants",
+        price: 550,
+        currency: "R",
+        category: "pants"
+      }
+    ];
+
+    const searchInput = document.getElementById('searchInput');
+    const locationFilter = document.getElementById('locationFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    const resultsGrid = document.getElementById('resultsGrid');
+
+    function renderStores() {
+      const query = searchInput.value.toLowerCase();
+      const selectedLocation = locationFilter.value;
+      const selectedSort = sortFilter.value;
+
+      let filtered = storesData.filter(store => {
+        const matchesQuery = store.name.toLowerCase().includes(query) ||
+                             store.product.toLowerCase().includes(query) ||
+                             store.category.toLowerCase().includes(query);
+        const matchesLocation = selectedLocation === 'all' || store.location === selectedLocation;
+        return matchesQuery && matchesLocation;
+      });
+
+      if (selectedSort === 'rating') {
+        filtered.sort((a, b) => b.rating - a.rating);
+      } else if (selectedSort === 'fastest') {
+        filtered.sort((a, b) => a.shippingDays - b.shippingDays);
+      }
+
+      resultsGrid.innerHTML = '';
+      if (filtered.length === 0) {
+        resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 20px; color: #94a3b8;">No stores or products found matching that search.</p>`;
+        return;
+      }
+
+      filtered.forEach(store => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div>
+            <div class="card-header">
+              <span class="store-name">${store.name}</span>
+              <span class="rating">★ ${store.rating}</span>
+            </div>
+            <span class="badge">📍 ${store.location}</span>
+            <div class="product-info">
+              <div class="item-title">${store.product}</div>
+              <div class="item-price">${store.currency}${store.price}</div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="shipping">${store.shippingText}</span>
+            <a href="${store.url}" target="_blank" rel="noopener" class="visit-btn">Visit Store ↗</a>
+          </div>
+        `;
+        resultsGrid.appendChild(card);
+      });
+    }
+
+    searchInput.addEventListener('input', renderStores);
+    locationFilter.addEventListener('change', renderStores);
+    sortFilter.addEventListener('change', renderStores);
+
+    renderStores();
+  </script>
 </body>
 </html>
