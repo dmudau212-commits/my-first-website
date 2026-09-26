@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ShopFinder — Trusted E-Commerce Directory</title>
-  <meta name="description" content="Find trusted online stores, compare prices, and discover fast local shipping.">
+  <title>ShopFinder — Global E-Commerce Directory</title>
+  <meta name="description" content="Search verified online stores worldwide for clothing, tech, bikes, and more.">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background: #0f172a; color: #f8fafc; min-height: 100vh; }
@@ -52,18 +52,16 @@
   <div class="container">
     <header>
       <h1>ShopFinder</h1>
-      <p>Search any item across verified online stores with fast shipping.</p>
+      <p>Find trusted online stores that sell exactly what you are looking for.</p>
     </header>
 
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Search for anything (e.g. baby clothes, shoes, hoodie)...">
+      <input type="text" id="searchInput" placeholder="Search items (e.g. bikes, hoodie, tech, baby clothes)...">
     </div>
 
     <div class="filters">
       <select id="locationFilter">
-        <option value="all">All Locations</option>
-        <option value="South Africa">South Africa 🇿🇦</option>
-        <option value="International">International 🌍</option>
+        <option value="all">🌍 All Countries</option>
       </select>
 
       <select id="sortFilter">
@@ -87,10 +85,20 @@
       try {
         const response = await fetch('./stores.json');
         storesData = await response.json();
+        buildLocationOptions();
         renderStores();
       } catch (err) {
         resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444;">Failed to load store database.</p>`;
       }
+    }
+
+    // Automatically build country options based on whatever is inside stores.json
+    function buildLocationOptions() {
+      const locations = ['all', ...new Set(storesData.map(s => s.location))];
+      locationFilter.innerHTML = locations.map(loc => {
+        if (loc === 'all') return `<option value="all">🌍 All Countries</option>`;
+        return `<option value="${loc}">${loc}</option>`;
+      }).join('');
     }
 
     function renderStores() {
@@ -100,7 +108,23 @@
       const selectedSort = sortFilter.value;
 
       let filtered = storesData.filter(store => {
-        return selectedLocation === 'all' || store.location === selectedLocation;
+        const matchesLocation = selectedLocation === 'all' || store.location === selectedLocation;
+        
+        // If search bar is blank, show all stores for that country
+        if (!query) return matchesLocation;
+
+        // Check category relevance
+        const sellsEverything = store.categories && store.categories.includes("all");
+        const matchesName = store.name.toLowerCase().includes(query);
+        const matchesProduct = store.product.toLowerCase().includes(query);
+        const matchesCategory = store.categories && store.categories.some(cat => {
+          const c = cat.toLowerCase();
+          return c.includes(query) || query.includes(c);
+        });
+
+        const matchesSearch = sellsEverything || matchesName || matchesProduct || matchesCategory;
+
+        return matchesLocation && matchesSearch;
       });
 
       if (selectedSort === 'rating') {
@@ -111,8 +135,12 @@
 
       resultsGrid.innerHTML = '';
 
+      if (filtered.length === 0) {
+        resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 30px; color: #94a3b8;">No stores found that sell "${rawQuery}". Try searching for something else!</p>`;
+        return;
+      }
+
       filtered.forEach(store => {
-        // If user typed something, create a direct search link to that store
         const targetUrl = query.length > 0 
           ? `${store.searchUrl}${encodeURIComponent(rawQuery)}` 
           : store.url;
