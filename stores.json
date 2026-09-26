@@ -4,167 +4,170 @@
     "name": "Superbalist",
     "url": "https://superbalist.com",
     "searchUrl": "https://superbalist.com/search?q=",
-    "location": "South Africa 🇿🇦",
-    "shippingDays": 2,
-    "shippingText": "⚡ 1-3 Days Express",
+    "country": "South Africa",
+    "flag": "🇿🇦",
+    "shipsTo": ["South Africa"],
+    "localShippingDays": "1-3 Days Express",
+    "intlShippingDays": "N/A",
     "rating": 4.8,
-    "minPrice": 150,
-    "maxPrice": 1200,
-    "product": "Fashion, Streetwear & Apparel",
-    "categories": ["clothing", "clothes", "fashion", "shoes", "hoodie", "hoodies", "baby clothes", "streetwear", "jackets", "pants"]
+    "minPriceZAR": 150,
+    "maxPriceZAR": 1200,
+    "product": "Fashion, Streetwear & Baby Wear",
+    "categories": ["clothing", "clothes", "fashion", "shoes", "hoodie", "hoodies", "baby clothes", "streetwear"],
+    "sampleProducts": [
+      {
+        "name": "Oversized Streetwear Hoodie",
+        "keywords": ["hoodie", "hoodies", "clothes", "clothing"],
+        "image": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80"
+      }
+    ]
   },
   {
     "id": 2,
     "name": "Shelflife",
     "url": "https://www.shelflife.co.za",
     "searchUrl": "https://www.shelflife.co.za/search?q=",
-    "location": "South Africa 🇿🇦",
-    "shippingDays": 2,
-    "shippingText": "⚡ 2-3 Days Local Delivery",
+    "country": "South Africa",
+    "flag": "🇿🇦",
+    "shipsTo": ["South Africa", "Worldwide"],
+    "localShippingDays": "2-3 Days Local",
+    "intlShippingDays": "5-10 Days Global",
     "rating": 4.9,
-    "minPrice": 400,
-    "maxPrice": 3500,
-    "product": "Sneakers, Premium Hoodies & Streetwear",
-    "categories": ["clothing", "clothes", "fashion", "shoes", "hoodie", "hoodies", "sneakers", "streetwear", "caps"]
+    "minPriceZAR": 400,
+    "maxPriceZAR": 3500,
+    "product": "Sneakers & Premium Apparel",
+    "categories": ["clothing", "clothes", "fashion", "shoes", "hoodie", "hoodies", "sneakers", "streetwear"],
+    "sampleProducts": [
+      {
+        "name": "Graphic Print Hoodie",
+        "keywords": ["hoodie", "hoodies"],
+        "image": "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=600&q=80"
+      }
+    ]
   },
   {
     "id": 3,
     "name": "Takealot",
     "url": "https://www.takealot.com",
     "searchUrl": "https://www.takealot.com/all?qsearch=",
-    "location": "South Africa 🇿🇦",
-    "shippingDays": 1,
-    "shippingText": "⚡ Next Day / Same Day",
+    "country": "South Africa",
+    "flag": "🇿🇦",
+    "shipsTo": ["South Africa"],
+    "localShippingDays": "1-2 Days Express",
+    "intlShippingDays": "N/A",
     "rating": 4.7,
-    "minPrice": 50,
-    "maxPrice": 10000,
-    "product": "General Marketplace (Everything)",
-    "categories": ["all", "everything", "bikes", "bicycle", "electronics", "tech", "baby clothes", "toys", "appliances", "gaming", "phones"]
+    "minPriceZAR": 100,
+    "maxPriceZAR": 25000,
+    "product": "Electronics, Phones, Bikes & Everything",
+    "categories": ["all", "everything", "iphone 17", "iphone", "bikes", "bicycle", "electronics", "tech", "baby clothes"],
+    "sampleProducts": [
+      {
+        "name": "Apple iPhone 17 Pro",
+        "keywords": ["iphone", "iphone 17", "apple", "phone"],
+        "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        "name": "Mountain Trail Bike 29er",
+        "keywords": ["bike", "bikes", "bicycle"],
+        "image": "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80"
+      }
+    ]
   },
   {
     "id": 4,
-    "name": "Mr Price (MRP)",
-    "url": "https://www.mrp.com",
-    "searchUrl": "https://www.mrp.com/en_za/search?q=",
-    "location": "South Africa 🇿🇦",
-    "shippingDays": 3,
-    "shippingText": "📦 2-4 Days Shipping",
-    "rating": 4.5,
-    "minPrice": 80,
-    "maxPrice": 500,
-    "product": "Budget Clothes & Everyday Essentials",
-    "categories": ["clothing", "clothes", "fashion", "hoodie", "hoodies", "baby clothes", "pants", "budget"]
-  },
-  {
-    "id": 5,
     "name": "Amazon US",
     "url": "https://www.amazon.com",
     "searchUrl": "https://www.amazon.com/s?k=",
-    "location": "United States 🇺🇸",
-    "shippingDays": 5,
-    "shippingText": "✈️ 4-7 Days Shipping",
+    "country": "United States",
+    "flag": "🇺🇸",
+    "shipsTo": ["Worldwide", "South Africa", "United States", "United Kingdom", "Nigeria", "Kenya", "Canada", "Australia"],
+    "localShippingDays": "1-2 Days Local",
+    "intlShippingDays": "4-7 Days Global Shipping",
     "rating": 4.9,
-    "minPrice": 100,
-    "maxPrice": 5000,
-    "product": "Global General Marketplace",
-    "categories": ["all", "everything", "bikes", "electronics", "clothes", "hoodie", "hoodies", "toys", "tech", "gaming"]
+    "minPriceZAR": 150,
+    "maxPriceZAR": 30000,
+    "product": "Global Superstore & Electronics",
+    "categories": ["all", "everything", "iphone 17", "iphone", "bikes", "electronics", "clothes", "hoodie", "hoodies"],
+    "sampleProducts": [
+      {
+        "name": "Apple iPhone 17 / Pro Max",
+        "keywords": ["iphone 17", "iphone", "phone"],
+        "image": "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        "name": "Speed Racing Road Bike",
+        "keywords": ["bike", "bikes"],
+        "image": "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&w=600&q=80"
+      }
+    ]
   },
   {
-    "id": 6,
+    "id": 5,
     "name": "Nike US",
     "url": "https://www.nike.com",
     "searchUrl": "https://www.nike.com/w?q=",
-    "location": "United States 🇺🇸",
-    "shippingDays": 6,
-    "shippingText": "✈️ 5-8 Days Express",
+    "country": "United States",
+    "flag": "🇺🇸",
+    "shipsTo": ["Worldwide", "South Africa", "United States", "United Kingdom", "Canada"],
+    "localShippingDays": "2-4 Days Local",
+    "intlShippingDays": "5-8 Days Global Express",
     "rating": 4.8,
-    "minPrice": 350,
-    "maxPrice": 4000,
-    "product": "Sportswear, Sneakers & Tech Fleece Hoodies",
-    "categories": ["clothing", "clothes", "fashion", "shoes", "hoodie", "hoodies", "sneakers", "sportswear"]
+    "minPriceZAR": 400,
+    "maxPriceZAR": 4500,
+    "product": "Sportswear, Tech Fleece Hoodies & Kicks",
+    "categories": ["clothing", "clothes", "fashion", "shoes", "hoodie", "hoodies", "sneakers"],
+    "sampleProducts": [
+      {
+        "name": "Nike Sportswear Club Fleece Hoodie",
+        "keywords": ["hoodie", "hoodies", "nike"],
+        "image": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "iStore South Africa",
+    "url": "https://www.istore.co.za",
+    "searchUrl": "https://www.istore.co.za/search?q=",
+    "country": "South Africa",
+    "flag": "🇿🇦",
+    "shipsTo": ["South Africa"],
+    "localShippingDays": "1-3 Days Shipping",
+    "intlShippingDays": "N/A",
+    "rating": 4.9,
+    "minPriceZAR": 2000,
+    "maxPriceZAR": 35000,
+    "product": "Official Apple Products & Accessories",
+    "categories": ["iphone 17", "iphone", "apple", "electronics", "phones", "tech"],
+    "sampleProducts": [
+      {
+        "name": "Apple iPhone 17",
+        "keywords": ["iphone", "iphone 17", "apple"],
+        "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80"
+      }
+    ]
   },
   {
     "id": 7,
-    "name": "PacSun",
-    "url": "https://www.pacsun.com",
-    "searchUrl": "https://www.pacsun.com/search?q=",
-    "location": "United States 🇺🇸",
-    "shippingDays": 7,
-    "shippingText": "✈️ 6-9 Days Shipping",
-    "rating": 4.6,
-    "minPrice": 300,
-    "maxPrice": 1800,
-    "product": "LA Streetwear, Graphic Tees & Hoodies",
-    "categories": ["clothing", "clothes", "fashion", "hoodie", "hoodies", "streetwear", "pants"]
-  },
-  {
-    "id": 8,
-    "name": "Urban Outfitters US",
-    "url": "https://www.urbanoutfitters.com",
-    "searchUrl": "https://www.urbanoutfitters.com/search?q=",
-    "location": "United States 🇺🇸",
-    "shippingDays": 7,
-    "shippingText": "✈️ 6-10 Days Shipping",
-    "rating": 4.6,
-    "minPrice": 350,
-    "maxPrice": 2500,
-    "product": "Trendy Streetwear & Vintage Hoodies",
-    "categories": ["clothing", "clothes", "fashion", "hoodie", "hoodies", "streetwear", "jackets"]
-  },
-  {
-    "id": 9,
-    "name": "StockX",
-    "url": "https://stockx.com",
-    "searchUrl": "https://stockx.com/search?s=",
-    "location": "United States 🇺🇸",
-    "shippingDays": 8,
-    "shippingText": "✈️ Verified Courier Delivery",
-    "rating": 4.7,
-    "minPrice": 800,
-    "maxPrice": 15000,
-    "product": "Authentic Sneakers & Designer Hoodies",
-    "categories": ["shoes", "sneakers", "hoodie", "hoodies", "streetwear", "fashion"]
-  },
-  {
-    "id": 10,
-    "name": "Walmart US",
-    "url": "https://www.walmart.com",
-    "searchUrl": "https://www.walmart.com/search?q=",
-    "location": "United States 🇺🇸",
-    "shippingDays": 7,
-    "shippingText": "✈️ 5-9 Days Courier",
-    "rating": 4.4,
-    "minPrice": 80,
-    "maxPrice": 3000,
-    "product": "Budget Apparel, Electronics & Toys",
-    "categories": ["all", "everything", "clothes", "hoodie", "hoodies", "baby clothes", "electronics", "bikes"]
-  },
-  {
-    "id": 11,
-    "name": "ASOS",
+    "name": "ASOS UK",
     "url": "https://www.asos.com",
     "searchUrl": "https://www.asos.com/search/?q=",
-    "location": "United Kingdom 🇬🇧",
-    "shippingDays": 7,
-    "shippingText": "✈️ 5-8 Days Express Courier",
-    "rating": 4.6,
-    "minPrice": 250,
-    "maxPrice": 2500,
-    "product": "Global Fashion & Oversized Apparel",
-    "categories": ["clothing", "clothes", "fashion", "hoodie", "hoodies", "shoes", "dresses"]
-  },
-  {
-    "id": 12,
-    "name": "SHEIN",
-    "url": "https://www.shein.com",
-    "searchUrl": "https://www.shein.com/pdsearch/",
-    "location": "China 🇨🇳",
-    "shippingDays": 10,
-    "shippingText": "✈️ 8-14 Days Express",
-    "rating": 4.5,
-    "minPrice": 80,
-    "maxPrice": 600,
-    "product": "Ultra-Low Price Trendy Clothes & Hoodies",
-    "categories": ["clothing", "clothes", "fashion", "hoodie", "hoodies", "baby clothes", "shoes"]
+    "country": "United Kingdom",
+    "flag": "🇬🇧",
+    "shipsTo": ["Worldwide", "South Africa", "United States", "United Kingdom", "Nigeria", "Australia"],
+    "localShippingDays": "2-3 Days Local",
+    "intlShippingDays": "5-9 Days International",
+    "rating": 4.7,
+    "minPriceZAR": 300,
+    "maxPriceZAR": 2500,
+    "product": "Global Fashion & Oversized Hoodies",
+    "categories": ["clothing", "clothes", "fashion", "hoodie", "hoodies", "shoes"],
+    "sampleProducts": [
+      {
+        "name": "ASOS Design Oversized Fit Hoodie",
+        "keywords": ["hoodie", "hoodies"],
+        "image": "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=600&q=80"
+      }
+    ]
   }
 ]
