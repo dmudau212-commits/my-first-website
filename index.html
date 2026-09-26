@@ -36,11 +36,10 @@
     
     .product-info { margin: 12px 0; border-top: 1px solid #334155; padding-top: 10px; }
     .item-title { font-size: 0.9rem; color: #cbd5e1; }
-    .item-price { font-size: 1.2rem; font-weight: bold; color: #4ade80; margin-top: 4px; }
 
     .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
     .shipping { font-size: 0.8rem; color: #94a3b8; }
-    .visit-btn { background: #38bdf8; color: #0f172a; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; }
+    .visit-btn { background: #38bdf8; color: #0f172a; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; text-align: center; }
   </style>
 </head>
 <body>
@@ -53,11 +52,11 @@
   <div class="container">
     <header>
       <h1>ShopFinder</h1>
-      <p>Compare prices, check store trust ratings, and find fast local delivery.</p>
+      <p>Search any item across verified online stores with fast shipping.</p>
     </header>
 
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Search for items or stores (e.g. hoodie)...">
+      <input type="text" id="searchInput" placeholder="Search for anything (e.g. baby clothes, shoes, hoodie)...">
     </div>
 
     <div class="filters">
@@ -84,7 +83,6 @@
     const sortFilter = document.getElementById('sortFilter');
     const resultsGrid = document.getElementById('resultsGrid');
 
-    // Fetch JSON database dynamically
     async function loadStores() {
       try {
         const response = await fetch('./stores.json');
@@ -96,19 +94,13 @@
     }
 
     function renderStores() {
-      const query = searchInput.value.trim().toLowerCase();
+      const rawQuery = searchInput.value.trim();
+      const query = rawQuery.toLowerCase();
       const selectedLocation = locationFilter.value;
       const selectedSort = sortFilter.value;
 
       let filtered = storesData.filter(store => {
-        const matchesName = store.name.toLowerCase().includes(query);
-        const matchesProduct = store.product.toLowerCase().includes(query);
-        const matchesKeywords = store.keywords ? store.keywords.some(k => k.toLowerCase().includes(query)) : false;
-        
-        const matchesQuery = query === "" || matchesName || matchesProduct || matchesKeywords;
-        const matchesLocation = selectedLocation === 'all' || store.location === selectedLocation;
-        
-        return matchesQuery && matchesLocation;
+        return selectedLocation === 'all' || store.location === selectedLocation;
       });
 
       if (selectedSort === 'rating') {
@@ -118,12 +110,17 @@
       }
 
       resultsGrid.innerHTML = '';
-      if (filtered.length === 0) {
-        resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 20px; color: #94a3b8;">No stores or products found matching "${searchInput.value}".</p>`;
-        return;
-      }
 
       filtered.forEach(store => {
+        // If user typed something, create a direct search link to that store
+        const targetUrl = query.length > 0 
+          ? `${store.searchUrl}${encodeURIComponent(rawQuery)}` 
+          : store.url;
+
+        const buttonLabel = query.length > 0 
+          ? `Search "${rawQuery}" on ${store.name} ↗` 
+          : `Visit Store ↗`;
+
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
@@ -135,12 +132,11 @@
             <span class="badge">📍 ${store.location}</span>
             <div class="product-info">
               <div class="item-title">${store.product}</div>
-              <div class="item-price">${store.currency}${store.price}</div>
             </div>
           </div>
           <div class="card-footer">
             <span class="shipping">${store.shippingText}</span>
-            <a href="${store.url}" target="_blank" rel="noopener" class="visit-btn">Visit Store ↗</a>
+            <a href="${targetUrl}" target="_blank" rel="noopener" class="visit-btn">${buttonLabel}</a>
           </div>
         `;
         resultsGrid.appendChild(card);
