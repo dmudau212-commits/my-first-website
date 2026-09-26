@@ -1,0 +1,19 @@
+[
+  {
+    "id": 1,
+    "name": "Urban Wear Co",
+    "url": "https://example-store.com",
+    "location": "South Africa",
+    "shippingTime": "2-4 Days",
+    "rating": 4.8,
+    "categories": ["hoodies", "streetwear", "clothing"],
+    "products": [
+      {
+        "title": "Oversized Heavyweight Hoodie",
+        "price": "R650",
+        "image": "https://via.placeholder.com/150",
+        "buyLink": "https://example-store.com/products/hoodie"
+      }
+    ]
+  }
+]
