@@ -1,54 +1,54 @@
 [
   {
     "id": 1,
+    "name": "Superbalist",
+    "url": "https://superbalist.com",
+    "searchUrl": "https://superbalist.com/search?q=",
+    "location": "South Africa",
+    "shippingDays": 2,
+    "shippingText": "⚡ 1-3 Days Express",
+    "rating": 4.8,
+    "categories": ["clothing", "shoes", "baby clothes", "kids", "hoodies", "fashion"],
+    "product": "Fashion, Streetwear & Baby Wear",
+    "price": "Varies"
+  },
+  {
+    "id": 2,
     "name": "Shelflife",
     "url": "https://www.shelflife.co.za",
+    "searchUrl": "https://www.shelflife.co.za/search?q=",
     "location": "South Africa",
     "shippingDays": 2,
     "shippingText": "⚡ 2-3 Days Local Delivery",
     "rating": 4.9,
-    "product": "Streetwear Hoodies & Tees",
-    "price": 750,
-    "currency": "R",
-    "keywords": ["hoodie", "hoodies", "streetwear", "sneakers", "pants"]
-  },
-  {
-    "id": 2,
-    "name": "Superbalist",
-    "url": "https://superbalist.com",
-    "location": "South Africa",
-    "shippingDays": 2,
-    "shippingText": "⚡ 1-3 Days Express",
-    "rating": 4.7,
-    "product": "Oversized Heavyweight Hoodie",
-    "price": 499,
-    "currency": "R",
-    "keywords": ["hoodie", "hoodies", "jackets", "clothes", "fashion"]
+    "categories": ["streetwear", "sneakers", "hoodies", "caps", "clothing"],
+    "product": "Sneakers, Hoodies & Accessories",
+    "price": "Varies"
   },
   {
     "id": 3,
-    "name": "Drip Supply ZA",
-    "url": "https://example.com",
+    "name": "Takealot",
+    "url": "https://www.takealot.com",
+    "searchUrl": "https://www.takealot.com/all?qsearch=",
     "location": "South Africa",
     "shippingDays": 1,
-    "shippingText": "⚡ 1-2 Days Overnight",
-    "rating": 4.8,
-    "product": "Heavyweight Zip Hoodie",
-    "price": 799,
-    "currency": "R",
-    "keywords": ["hoodie", "hoodies", "zip", "streetwear"]
+    "shippingText": "⚡ Next Day / Same Day Delivery",
+    "rating": 4.7,
+    "categories": ["baby clothes", "electronics", "tech", "home", "toys", "all"],
+    "product": "General Marketplace (Everything)",
+    "price": "Varies"
   },
   {
     "id": 4,
     "name": "ASOS",
     "url": "https://www.asos.com",
+    "searchUrl": "https://www.asos.com/search/?q=",
     "location": "International",
     "shippingDays": 7,
     "shippingText": "✈️ 5-8 Days Express Courier",
     "rating": 4.6,
-    "product": "Design Oversized Hoodie",
-    "price": 620,
-    "currency": "R",
-    "keywords": ["hoodie", "hoodies", "international", "fashion"]
+    "categories": ["fashion", "clothing", "hoodies", "shoes"],
+    "product": "Global Fashion & Apparel",
+    "price": "Varies"
   }
 ]
