@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ShopFinder — Global E-Commerce Directory</title>
-  <meta name="description" content="Search verified online stores worldwide for clothing, tech, bikes, and more.">
+  <title>ShopFinder — Global Store Directory</title>
+  <meta name="description" content="Find trusted online stores worldwide with automatic location and currency detection.">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background: #0f172a; color: #f8fafc; min-height: 100vh; }
@@ -17,7 +17,9 @@
     h1 { color: #38bdf8; font-size: 2rem; margin-bottom: 8px; }
     p { color: #94a3b8; font-size: 0.95rem; }
 
-    .search-box { display: flex; gap: 10px; margin: 25px 0 15px; }
+    .location-status { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 8px 14px; margin-bottom: 15px; font-size: 0.85rem; color: #38bdf8; display: flex; justify-content: space-between; align-items: center; }
+
+    .search-box { display: flex; gap: 10px; margin: 15px 0; }
     input[type="text"] { flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: white; font-size: 1rem; outline: none; }
     input[type="text"]:focus { border-color: #38bdf8; }
     
@@ -27,7 +29,10 @@
     .results-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
     @media (min-width: 600px) { .results-grid { grid-template-columns: 1fr 1fr; } }
 
-    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+    .product-preview-img { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid #334155; }
+    
+    .card-body { padding: 16px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
     .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
     .store-name { font-weight: 600; font-size: 1.1rem; color: #f8fafc; }
     .rating { background: #0284c7; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
@@ -54,24 +59,27 @@
   <div class="container">
     <header>
       <h1>ShopFinder</h1>
-      <p>Find trusted online stores that sell exactly what you are looking for.</p>
+      <p>Search trusted online stores that ship directly to your country.</p>
     </header>
 
+    <div class="location-status" id="locationStatus">
+      <span>🌐 Detecting your country...</span>
+    </div>
+
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Search items (e.g. hoodie, bikes, tech, baby clothes)...">
+      <input type="text" id="searchInput" placeholder="Search for items (e.g. iPhone 17, hoodie, bikes)...">
     </div>
 
     <div class="filters">
-      <select id="locationFilter">
-        <option value="all">🌍 All Countries</option>
-      </select>
-
-      <select id="priceFilter">
-        <option value="all">💵 Any Price Range</option>
-        <option value="under300">Under R300</option>
-        <option value="300to800">R300 - R800</option>
-        <option value="800to1500">R800 - R1500</option>
-        <option value="1500plus">R1500+</option>
+      <select id="countryFilter">
+        <option value="South Africa">🇿🇦 South Africa (ZAR)</option>
+        <option value="United States">🇺🇸 United States (USD)</option>
+        <option value="United Kingdom">🇬🇧 United Kingdom (GBP)</option>
+        <option value="Nigeria">🇳🇬 Nigeria (NGN)</option>
+        <option value="Kenya">🇰🇪 Kenya (KES)</option>
+        <option value="Australia">🇦🇺 Australia (AUD)</option>
+        <option value="Canada">🇨🇦 Canada (CAD)</option>
+        <option value="Germany">🇩🇪 Germany / EU (EUR)</option>
       </select>
 
       <select id="sortFilter">
@@ -86,50 +94,72 @@
   <script>
     let storesData = [];
 
+    // Currency Conversion Table (Base rates vs ZAR)
+    const currencies = {
+      "South Africa": { code: "ZAR", symbol: "R", rate: 1, flag: "🇿🇦" },
+      "United States": { code: "USD", symbol: "$", rate: 0.056, flag: "🇺🇸" },
+      "United Kingdom": { code: "GBP", symbol: "£", rate: 0.042, flag: "🇬🇧" },
+      "Nigeria": { code: "NGN", symbol: "₦", rate: 85, flag: "🇳🇬" },
+      "Kenya": { code: "KES", symbol: "KSh", rate: 7.2, flag: "🇰🇪" },
+      "Australia": { code: "AUD", symbol: "A$", rate: 0.084, flag: "🇦🇺" },
+      "Canada": { code: "CAD", symbol: "CA$", rate: 0.076, flag: "🇨🇦" },
+      "Germany": { code: "EUR", symbol: "€", rate: 0.050, flag: "🇩🇪" }
+    };
+
     const searchInput = document.getElementById('searchInput');
-    const locationFilter = document.getElementById('locationFilter');
-    const priceFilter = document.getElementById('priceFilter');
+    const countryFilter = document.getElementById('countryFilter');
     const sortFilter = document.getElementById('sortFilter');
     const resultsGrid = document.getElementById('resultsGrid');
+    const locationStatus = document.getElementById('locationStatus');
 
     async function loadStores() {
       try {
         const response = await fetch('./stores.json');
         storesData = await response.json();
-        buildLocationOptions();
-        renderStores();
+        detectUserCountry();
       } catch (err) {
         resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444;">Failed to load store database.</p>`;
       }
     }
 
-    function buildLocationOptions() {
-      const locations = ['all', ...new Set(storesData.map(s => s.location))];
-      locationFilter.innerHTML = locations.map(loc => {
-        if (loc === 'all') return `<option value="all">🌍 All Countries</option>`;
-        return `<option value="${loc}">${loc}</option>`;
-      }).join('');
+    // Auto-detect visitor's country via standard IP lookup
+    async function detectUserCountry() {
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        const userCountry = data.country_name;
+
+        if (currencies[userCountry]) {
+          countryFilter.value = userCountry;
+          locationStatus.innerHTML = `<span>📍 Auto-detected country: <strong>${data.country_name} ${currencies[userCountry].flag}</strong></span>`;
+        } else {
+          locationStatus.innerHTML = `<span>📍 Location detected: <strong>${data.country_name || 'Global'}</strong> (Showing international stores)</span>`;
+        }
+      } catch (e) {
+        locationStatus.innerHTML = `<span>📍 Selected country: <strong>${countryFilter.value}</strong></span>`;
+      }
+      renderStores();
+    }
+
+    function convertPrice(zarAmount, country) {
+      const curr = currencies[country] || currencies["United States"];
+      const converted = Math.round(zarAmount * curr.rate);
+      return `${curr.symbol}${converted.toLocaleString()}`;
     }
 
     function renderStores() {
       const rawQuery = searchInput.value.trim();
       const query = rawQuery.toLowerCase();
-      const selectedLocation = locationFilter.value;
-      const selectedPrice = priceFilter.value;
+      const selectedCountry = countryFilter.value;
       const selectedSort = sortFilter.value;
 
+      locationStatus.innerHTML = `<span>📍 Showing stores shipping to: <strong>${selectedCountry} ${currencies[selectedCountry]?.flag || ''}</strong></span>`;
+
       let filtered = storesData.filter(store => {
-        // Location Match
-        const matchesLocation = selectedLocation === 'all' || store.location === selectedLocation;
+        // Ships to selected country logic
+        const matchesCountry = store.country === selectedCountry || store.shipsTo.includes("Worldwide") || store.shipsTo.includes(selectedCountry);
 
-        // Price Match
-        let matchesPrice = true;
-        if (selectedPrice === 'under300') matchesPrice = store.minPrice <= 300;
-        else if (selectedPrice === '300to800') matchesPrice = store.minPrice <= 800 && store.maxPrice >= 300;
-        else if (selectedPrice === '800to1500') matchesPrice = store.minPrice <= 1500 && store.maxPrice >= 800;
-        else if (selectedPrice === '1500plus') matchesPrice = store.maxPrice >= 1500;
-
-        // Search Match
+        // Search match logic
         let matchesSearch = true;
         if (query.length > 0) {
           const sellsEverything = store.categories && store.categories.includes("all");
@@ -142,24 +172,36 @@
           matchesSearch = sellsEverything || matchesName || matchesProduct || matchesCategory;
         }
 
-        return matchesLocation && matchesPrice && matchesSearch;
+        return matchesCountry && matchesSearch;
       });
 
       // Sorting
       if (selectedSort === 'rating') {
         filtered.sort((a, b) => b.rating - a.rating);
       } else if (selectedSort === 'fastest') {
-        filtered.sort((a, b) => a.shippingDays - b.shippingDays);
+        filtered.sort((a, b) => a.id - b.id);
       }
 
       resultsGrid.innerHTML = '';
 
       if (filtered.length === 0) {
-        resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 30px; color: #94a3b8;">No stores found matching your criteria. Try adjusting your filters!</p>`;
+        resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 30px; color: #94a3b8;">No stores found matching "${rawQuery}" that ship to ${selectedCountry}.</p>`;
         return;
       }
 
       filtered.forEach(store => {
+        const isLocal = store.country === selectedCountry;
+        const shippingTime = isLocal ? `⚡ ${store.localShippingDays}` : `✈️ ${store.intlShippingDays}`;
+        const minP = convertPrice(store.minPriceZAR, selectedCountry);
+        const maxP = convertPrice(store.maxPriceZAR, selectedCountry);
+
+        // Find sample product matching user query to display image
+        let sampleProductImg = null;
+        if (query.length > 0 && store.sampleProducts) {
+          const match = store.sampleProducts.find(p => p.keywords.some(k => query.includes(k) || k.includes(query)));
+          if (match) sampleProductImg = match.image;
+        }
+
         const targetUrl = query.length > 0 
           ? `${store.searchUrl}${encodeURIComponent(rawQuery)}` 
           : store.url;
@@ -171,22 +213,25 @@
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-          <div>
-            <div class="card-header">
-              <span class="store-name">${store.name}</span>
-              <span class="rating">★ ${store.rating}</span>
+          ${sampleProductImg ? `<img src="${sampleProductImg}" alt="${rawQuery}" class="product-preview-img">` : ''}
+          <div class="card-body">
+            <div>
+              <div class="card-header">
+                <span class="store-name">${store.name}</span>
+                <span class="rating">★ ${store.rating}</span>
+              </div>
+              <div class="badges">
+                <span class="badge">${store.flag} ${store.country} ${isLocal ? '(Local)' : '(Global)'}</span>
+                <span class="badge price-badge">🏷️ ${minP} - ${maxP}</span>
+              </div>
+              <div class="product-info">
+                <div class="item-title">${store.product}</div>
+              </div>
             </div>
-            <div class="badges">
-              <span class="badge">📍 ${store.location}</span>
-              <span class="badge price-badge">🏷️ R${store.minPrice} - R${store.maxPrice}</span>
+            <div class="card-footer">
+              <span class="shipping">${shippingTime}</span>
+              <a href="${targetUrl}" target="_blank" rel="noopener" class="visit-btn">${buttonLabel}</a>
             </div>
-            <div class="product-info">
-              <div class="item-title">${store.product}</div>
-            </div>
-          </div>
-          <div class="card-footer">
-            <span class="shipping">${store.shippingText}</span>
-            <a href="${targetUrl}" target="_blank" rel="noopener" class="visit-btn">${buttonLabel}</a>
           </div>
         `;
         resultsGrid.appendChild(card);
@@ -194,8 +239,7 @@
     }
 
     searchInput.addEventListener('input', renderStores);
-    locationFilter.addEventListener('change', renderStores);
-    priceFilter.addEventListener('change', renderStores);
+    countryFilter.addEventListener('change', renderStores);
     sortFilter.addEventListener('change', renderStores);
 
     loadStores();
