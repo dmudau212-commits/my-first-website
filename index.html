@@ -32,7 +32,9 @@
     .store-name { font-weight: 600; font-size: 1.1rem; color: #f8fafc; }
     .rating { background: #0284c7; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
     
-    .badge { display: inline-block; background: #334155; color: #38bdf8; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; margin-top: 4px; }
+    .badges { display: flex; gap: 6px; align-items: center; margin-top: 4px; flex-wrap: wrap; }
+    .badge { display: inline-block; background: #334155; color: #38bdf8; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; }
+    .price-badge { background: #065f46; color: #34d399; font-weight: 600; }
     
     .product-info { margin: 12px 0; border-top: 1px solid #334155; padding-top: 10px; }
     .item-title { font-size: 0.9rem; color: #cbd5e1; }
@@ -56,12 +58,20 @@
     </header>
 
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Search items (e.g. bikes, hoodie, tech, baby clothes)...">
+      <input type="text" id="searchInput" placeholder="Search items (e.g. hoodie, bikes, tech, baby clothes)...">
     </div>
 
     <div class="filters">
       <select id="locationFilter">
         <option value="all">🌍 All Countries</option>
+      </select>
+
+      <select id="priceFilter">
+        <option value="all">💵 Any Price Range</option>
+        <option value="under300">Under R300</option>
+        <option value="300to800">R300 - R800</option>
+        <option value="800to1500">R800 - R1500</option>
+        <option value="1500plus">R1500+</option>
       </select>
 
       <select id="sortFilter">
@@ -78,6 +88,7 @@
 
     const searchInput = document.getElementById('searchInput');
     const locationFilter = document.getElementById('locationFilter');
+    const priceFilter = document.getElementById('priceFilter');
     const sortFilter = document.getElementById('sortFilter');
     const resultsGrid = document.getElementById('resultsGrid');
 
@@ -92,7 +103,6 @@
       }
     }
 
-    // Automatically build country options based on whatever is inside stores.json
     function buildLocationOptions() {
       const locations = ['all', ...new Set(storesData.map(s => s.location))];
       locationFilter.innerHTML = locations.map(loc => {
@@ -105,28 +115,37 @@
       const rawQuery = searchInput.value.trim();
       const query = rawQuery.toLowerCase();
       const selectedLocation = locationFilter.value;
+      const selectedPrice = priceFilter.value;
       const selectedSort = sortFilter.value;
 
       let filtered = storesData.filter(store => {
+        // Location Match
         const matchesLocation = selectedLocation === 'all' || store.location === selectedLocation;
-        
-        // If search bar is blank, show all stores for that country
-        if (!query) return matchesLocation;
 
-        // Check category relevance
-        const sellsEverything = store.categories && store.categories.includes("all");
-        const matchesName = store.name.toLowerCase().includes(query);
-        const matchesProduct = store.product.toLowerCase().includes(query);
-        const matchesCategory = store.categories && store.categories.some(cat => {
-          const c = cat.toLowerCase();
-          return c.includes(query) || query.includes(c);
-        });
+        // Price Match
+        let matchesPrice = true;
+        if (selectedPrice === 'under300') matchesPrice = store.minPrice <= 300;
+        else if (selectedPrice === '300to800') matchesPrice = store.minPrice <= 800 && store.maxPrice >= 300;
+        else if (selectedPrice === '800to1500') matchesPrice = store.minPrice <= 1500 && store.maxPrice >= 800;
+        else if (selectedPrice === '1500plus') matchesPrice = store.maxPrice >= 1500;
 
-        const matchesSearch = sellsEverything || matchesName || matchesProduct || matchesCategory;
+        // Search Match
+        let matchesSearch = true;
+        if (query.length > 0) {
+          const sellsEverything = store.categories && store.categories.includes("all");
+          const matchesName = store.name.toLowerCase().includes(query);
+          const matchesProduct = store.product.toLowerCase().includes(query);
+          const matchesCategory = store.categories && store.categories.some(cat => {
+            const c = cat.toLowerCase();
+            return c.includes(query) || query.includes(c);
+          });
+          matchesSearch = sellsEverything || matchesName || matchesProduct || matchesCategory;
+        }
 
-        return matchesLocation && matchesSearch;
+        return matchesLocation && matchesPrice && matchesSearch;
       });
 
+      // Sorting
       if (selectedSort === 'rating') {
         filtered.sort((a, b) => b.rating - a.rating);
       } else if (selectedSort === 'fastest') {
@@ -136,7 +155,7 @@
       resultsGrid.innerHTML = '';
 
       if (filtered.length === 0) {
-        resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 30px; color: #94a3b8;">No stores found that sell "${rawQuery}". Try searching for something else!</p>`;
+        resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 30px; color: #94a3b8;">No stores found matching your criteria. Try adjusting your filters!</p>`;
         return;
       }
 
@@ -157,7 +176,10 @@
               <span class="store-name">${store.name}</span>
               <span class="rating">★ ${store.rating}</span>
             </div>
-            <span class="badge">📍 ${store.location}</span>
+            <div class="badges">
+              <span class="badge">📍 ${store.location}</span>
+              <span class="badge price-badge">🏷️ R${store.minPrice} - R${store.maxPrice}</span>
+            </div>
             <div class="product-info">
               <div class="item-title">${store.product}</div>
             </div>
@@ -173,6 +195,7 @@
 
     searchInput.addEventListener('input', renderStores);
     locationFilter.addEventListener('change', renderStores);
+    priceFilter.addEventListener('change', renderStores);
     sortFilter.addEventListener('change', renderStores);
 
     loadStores();
