@@ -4,51 +4,71 @@
     "name": "Superbalist",
     "url": "https://superbalist.com",
     "searchUrl": "https://superbalist.com/search?q=",
-    "location": "South Africa",
+    "location": "South Africa 🇿🇦",
     "shippingDays": 2,
     "shippingText": "⚡ 1-3 Days Express",
     "rating": 4.8,
-    "categories": ["clothing", "shoes", "baby clothes", "kids", "hoodies", "fashion"],
-    "product": "Fashion, Streetwear & Baby Wear",
-    "price": "Varies"
+    "product": "Fashion, Apparel & Footwear",
+    "categories": ["clothing", "clothes", "fashion", "shoes", "hoodie", "hoodies", "baby clothes", "streetwear", "jackets", "pants"]
   },
   {
     "id": 2,
     "name": "Shelflife",
     "url": "https://www.shelflife.co.za",
     "searchUrl": "https://www.shelflife.co.za/search?q=",
-    "location": "South Africa",
+    "location": "South Africa 🇿🇦",
     "shippingDays": 2,
     "shippingText": "⚡ 2-3 Days Local Delivery",
     "rating": 4.9,
-    "categories": ["streetwear", "sneakers", "hoodies", "caps", "clothing"],
-    "product": "Sneakers, Hoodies & Accessories",
-    "price": "Varies"
+    "product": "Sneakers, Hoodies & Streetwear",
+    "categories": ["clothing", "clothes", "fashion", "shoes", "hoodie", "hoodies", "sneakers", "streetwear", "caps"]
   },
   {
     "id": 3,
     "name": "Takealot",
     "url": "https://www.takealot.com",
     "searchUrl": "https://www.takealot.com/all?qsearch=",
-    "location": "South Africa",
+    "location": "South Africa 🇿🇦",
     "shippingDays": 1,
     "shippingText": "⚡ Next Day / Same Day Delivery",
     "rating": 4.7,
-    "categories": ["baby clothes", "electronics", "tech", "home", "toys", "all"],
     "product": "General Marketplace (Everything)",
-    "price": "Varies"
+    "categories": ["all", "everything", "bikes", "bicycle", "electronics", "tech", "baby clothes", "toys", "appliances", "gaming", "phones"]
   },
   {
     "id": 4,
+    "name": "Cycle Lab",
+    "url": "https://www.cyclelab.com",
+    "searchUrl": "https://www.cyclelab.com/search?q=",
+    "location": "South Africa 🇿🇦",
+    "shippingDays": 3,
+    "shippingText": "📦 2-4 Days Shipping",
+    "rating": 4.8,
+    "product": "Bicycles, Cycling Gear & Helmets",
+    "categories": ["bikes", "bicycle", "cycling", "sports", "gear", "helmets"]
+  },
+  {
+    "id": 5,
+    "name": "Amazon",
+    "url": "https://www.amazon.com",
+    "searchUrl": "https://www.amazon.com/s?k=",
+    "location": "United States 🇺🇸",
+    "shippingDays": 5,
+    "shippingText": "✈️ 4-7 Days Global Express",
+    "rating": 4.9,
+    "product": "Global General Marketplace",
+    "categories": ["all", "everything", "bikes", "electronics", "clothes", "toys", "tech", "gaming"]
+  },
+  {
+    "id": 6,
     "name": "ASOS",
     "url": "https://www.asos.com",
     "searchUrl": "https://www.asos.com/search/?q=",
-    "location": "International",
+    "location": "United Kingdom 🇬🇧",
     "shippingDays": 7,
     "shippingText": "✈️ 5-8 Days Express Courier",
     "rating": 4.6,
-    "categories": ["fashion", "clothing", "hoodies", "shoes"],
     "product": "Global Fashion & Apparel",
-    "price": "Varies"
+    "categories": ["clothing", "clothes", "fashion", "hoodies", "shoes", "dresses"]
   }
 ]
