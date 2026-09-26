@@ -9,17 +9,14 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background: #0f172a; color: #f8fafc; min-height: 100vh; }
     
-    /* Sticky Top Ad Unit */
     .ad-banner { position: sticky; top: 0; background: #1e293b; border-bottom: 1px solid #334155; text-align: center; padding: 8px; font-size: 12px; color: #38bdf8; z-index: 100; }
     .ad-banner span { color: #94a3b8; font-size: 10px; display: block; text-transform: uppercase; }
 
-    /* Layout */
     .container { max-width: 800px; margin: 0 auto; padding: 20px; }
     header { text-align: center; margin: 20px 0; }
     h1 { color: #38bdf8; font-size: 2rem; margin-bottom: 8px; }
     p { color: #94a3b8; font-size: 0.95rem; }
 
-    /* Controls */
     .search-box { display: flex; gap: 10px; margin: 25px 0 15px; }
     input[type="text"] { flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: white; font-size: 1rem; outline: none; }
     input[type="text"]:focus { border-color: #38bdf8; }
@@ -27,7 +24,6 @@
     .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; }
     select { padding: 8px 12px; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: white; font-size: 0.85rem; outline: none; cursor: pointer; }
 
-    /* Results Cards */
     .results-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
     @media (min-width: 600px) { .results-grid { grid-template-columns: 1fr 1fr; } }
 
@@ -49,7 +45,6 @@
 </head>
 <body>
 
-  <!-- Sticky Top Ad Unit -->
   <div class="ad-banner">
     <span>Advertisement</span>
     Place Ad Banner Code Here (A-Ads or Google AdSense)
@@ -61,12 +56,10 @@
       <p>Compare prices, check store trust ratings, and find fast local delivery.</p>
     </header>
 
-    <!-- Search Input -->
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Search for items or stores (e.g. hoodie)...">
     </div>
 
-    <!-- Filter Dropdowns -->
     <div class="filters">
       <select id="locationFilter">
         <option value="all">All Locations</option>
@@ -80,78 +73,41 @@
       </select>
     </div>
 
-    <!-- Dynamic Output -->
     <div class="results-grid" id="resultsGrid"></div>
   </div>
 
   <script>
-    // Store Database Array
-    const storesData = [
-      {
-        name: "Urban Style Co",
-        url: "https://example.com",
-        location: "South Africa",
-        shippingDays: 2,
-        shippingText: "⚡ 2-3 Days Shipping",
-        rating: 4.9,
-        product: "Oversized Fleece Hoodie",
-        price: 650,
-        currency: "R",
-        category: "hoodie"
-      },
-      {
-        name: "Global Threads",
-        url: "https://example.com",
-        location: "International",
-        shippingDays: 10,
-        shippingText: "✈️ 7-12 Days Shipping",
-        rating: 4.5,
-        product: "Vintage Graphic Hoodie",
-        price: 450,
-        currency: "R",
-        category: "hoodie"
-      },
-      {
-        name: "Drip Supply ZA",
-        url: "https://example.com",
-        location: "South Africa",
-        shippingDays: 1,
-        shippingText: "⚡ 1-2 Days Overnight",
-        rating: 4.8,
-        product: "Heavyweight Zip Hoodie",
-        price: 799,
-        currency: "R",
-        category: "hoodie"
-      },
-      {
-        name: "Kicks & Fits",
-        url: "https://example.com",
-        location: "South Africa",
-        shippingDays: 3,
-        shippingText: "📦 3-4 Days Shipping",
-        rating: 4.2,
-        product: "Cargo Streetwear Pants",
-        price: 550,
-        currency: "R",
-        category: "pants"
-      }
-    ];
+    let storesData = [];
 
     const searchInput = document.getElementById('searchInput');
     const locationFilter = document.getElementById('locationFilter');
     const sortFilter = document.getElementById('sortFilter');
     const resultsGrid = document.getElementById('resultsGrid');
 
+    // Fetch JSON database dynamically
+    async function loadStores() {
+      try {
+        const response = await fetch('./stores.json');
+        storesData = await response.json();
+        renderStores();
+      } catch (err) {
+        resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444;">Failed to load store database.</p>`;
+      }
+    }
+
     function renderStores() {
-      const query = searchInput.value.toLowerCase();
+      const query = searchInput.value.trim().toLowerCase();
       const selectedLocation = locationFilter.value;
       const selectedSort = sortFilter.value;
 
       let filtered = storesData.filter(store => {
-        const matchesQuery = store.name.toLowerCase().includes(query) ||
-                             store.product.toLowerCase().includes(query) ||
-                             store.category.toLowerCase().includes(query);
+        const matchesName = store.name.toLowerCase().includes(query);
+        const matchesProduct = store.product.toLowerCase().includes(query);
+        const matchesKeywords = store.keywords ? store.keywords.some(k => k.toLowerCase().includes(query)) : false;
+        
+        const matchesQuery = query === "" || matchesName || matchesProduct || matchesKeywords;
         const matchesLocation = selectedLocation === 'all' || store.location === selectedLocation;
+        
         return matchesQuery && matchesLocation;
       });
 
@@ -163,7 +119,7 @@
 
       resultsGrid.innerHTML = '';
       if (filtered.length === 0) {
-        resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 20px; color: #94a3b8;">No stores or products found matching that search.</p>`;
+        resultsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 20px; color: #94a3b8;">No stores or products found matching "${searchInput.value}".</p>`;
         return;
       }
 
@@ -195,7 +151,7 @@
     locationFilter.addEventListener('change', renderStores);
     sortFilter.addEventListener('change', renderStores);
 
-    renderStores();
+    loadStores();
   </script>
 </body>
 </html>
