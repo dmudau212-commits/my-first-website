@@ -3,8 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ShopFinder — Global Store Directory</title>
-  <meta name="description" content="Find trusted online stores worldwide with automatic location and currency detection.">
+  
+  <!-- SEO & Search Engine Optimization Tags -->
+  <title>EasySearch — Global Store & Product Finder</title>
+  <meta name="description" content="EasySearch helps you find trusted online stores worldwide that ship directly to your country with real-time location and currency detection.">
+  <meta name="keywords" content="EasySearch, online store finder, global shipping, search products, e-commerce directory">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph Meta Tags (for WhatsApp & Social Media Shares) -->
+  <meta property="og:title" content="EasySearch — Global Store Finder">
+  <meta property="og:description" content="Find trusted online stores worldwide that ship directly to your country.">
+  <meta property="og:type" content="website">
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background: #0f172a; color: #f8fafc; min-height: 100vh; }
@@ -58,7 +68,7 @@
 
   <div class="container">
     <header>
-      <h1>ShopFinder</h1>
+      <h1>EasySearch</h1>
       <p>Search trusted online stores that ship directly to your country.</p>
     </header>
 
@@ -94,7 +104,6 @@
   <script>
     let storesData = [];
 
-    // Currency Conversion Table (Base rates vs ZAR)
     const currencies = {
       "South Africa": { code: "ZAR", symbol: "R", rate: 1, flag: "🇿🇦" },
       "United States": { code: "USD", symbol: "$", rate: 0.056, flag: "🇺🇸" },
@@ -122,7 +131,6 @@
       }
     }
 
-    // Auto-detect visitor's country via standard IP lookup
     async function detectUserCountry() {
       try {
         const res = await fetch('https://ipapi.co/json/');
@@ -156,10 +164,8 @@
       locationStatus.innerHTML = `<span>📍 Showing stores shipping to: <strong>${selectedCountry} ${currencies[selectedCountry]?.flag || ''}</strong></span>`;
 
       let filtered = storesData.filter(store => {
-        // Ships to selected country logic
         const matchesCountry = store.country === selectedCountry || store.shipsTo.includes("Worldwide") || store.shipsTo.includes(selectedCountry);
 
-        // Search match logic
         let matchesSearch = true;
         if (query.length > 0) {
           const sellsEverything = store.categories && store.categories.includes("all");
@@ -175,7 +181,6 @@
         return matchesCountry && matchesSearch;
       });
 
-      // Sorting
       if (selectedSort === 'rating') {
         filtered.sort((a, b) => b.rating - a.rating);
       } else if (selectedSort === 'fastest') {
@@ -195,7 +200,6 @@
         const minP = convertPrice(store.minPriceZAR, selectedCountry);
         const maxP = convertPrice(store.maxPriceZAR, selectedCountry);
 
-        // Find sample product matching user query to display image
         let sampleProductImg = null;
         if (query.length > 0 && store.sampleProducts) {
           const match = store.sampleProducts.find(p => p.keywords.some(k => query.includes(k) || k.includes(query)));
