@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://easysearch.vercel.app/sitemap.xml
